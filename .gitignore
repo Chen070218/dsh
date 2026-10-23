@@ -1,0 +1,25 @@
+# 构建产物（由 `npm run build` 从 src/ 生成）
+lib/
+
+# 依赖
+node_modules/
+
+# 测试与运行产物
+coverage/
+*.log
+.projectops/
+tmp/
+
+# 编辑器 / 操作系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 敏感文件（永远不要提交）
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+.npmrc

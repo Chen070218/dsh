@@ -1,0 +1,9 @@
+{
+  "name": "dsh-projectops",
+  "description": "AI 项目工程管家：结构扫描、依赖分析、任务管理、架构文档",
+  "version": "0.1.0",
+  "entry": {
+    "name": "dsh-projectops",
+    "inject": []
+  }
+}

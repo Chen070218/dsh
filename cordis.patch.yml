@@ -1,0 +1,24 @@
+# dsh-projectops bundle patch
+# 挂载后由插件向 DSH 工具注册表注册 scan_project / analyze_dependencies。
+# 手动加入 profile 时，把下面这段合并进 ~/.dsh/profiles/<profile>/cordis.patch.yml。
+- insert:
+    - id: projectops
+      name: dsh-projectops
+      config:
+        # 额外授权的工作区根目录（绝对路径）。留空表示只允许当前会话工作区。
+        allowedRoots: []
+        # 扫描限制，防止在大仓库上失控。
+        maxDepth: 6
+        maxEntries: 5000
+        includeHidden: false
+        extraExcludes: []
+        # 扫描缓存有效期（毫秒），0 表示关闭缓存。
+        cacheTtlMs: 30000
+        # 依赖分析限制。
+        maxFiles: 2000
+        maxFileBytes: 262144
+        # 任务数据库目录（相对工作区），第四阶段的任务工具使用。
+        tasksDirectory: .projectops
+        # 日志：warn 级别只输出告警；logToConsole 打开后写入 stderr。
+        logLevel: info
+        logToConsole: false

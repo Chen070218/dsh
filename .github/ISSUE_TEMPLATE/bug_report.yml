@@ -1,0 +1,37 @@
+name: Bug report
+description: 报告一个可复现的问题
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。安全漏洞请走 SECURITY.md 里的私下渠道，不要开公开 issue。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 发生了什么
+      description: 实际行为 vs 期望行为
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 调用 scan_project，参数 {...}
+        2. 期望 ... 实际 ...
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: 版本
+      description: dsh-projectops 版本 / DSH 版本 / Node 版本 / 操作系统
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志
+      description: 请先确认日志里没有密钥、路径敏感信息
+      render: text

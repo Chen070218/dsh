@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>dsh-projectops 效果图</title>
+<style>
+:root{color-scheme:dark}body{margin:0;padding:32px;width:1280px;background:#0b0f16;color:#e8eefc;font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+h1{font-size:26px;margin:0 0 4px}.sub{color:#8fa1bd;font-size:13px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#111826;border:1px solid #1f2b3d;border-radius:14px;padding:18px 20px}
+.card h2{font-size:15px;margin:0 0 12px;color:#9fb4d4}.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #1c2739;font-size:13px}
+.row:last-child{border-bottom:none}.row span:first-child{color:#8fa1bd}.mono{font-family:ui-monospace,Consolas,monospace}
+.stat{display:flex;gap:14px;margin-bottom:10px}.stat div{flex:1;background:#0d1420;border:1px solid #1c2739;border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-size:22px}.stat small{color:#8296b3;font-size:11px}
+.tool{font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:5px 10px;border-radius:999px;background:#142033;border:1px solid #24354d;color:#cfe0fb;display:inline-block;margin:0 6px 6px 0}
+.tag{font-size:11px;padding:2px 8px;border-radius:6px;margin-left:6px}.ok{background:#123023;color:#7ee2a8}.bad{background:#33191b;color:#ff9d94}
+.foot{margin-top:20px;color:#6f83a1;font-size:12px}
+</style></head><body>
+<h1>DSH ProjectOps <span style="font-size:13px;color:#7ee2a8">v0.3.0</span></h1>
+<div class="sub">DeepSeek Harness 项目工程管家插件 · 10 个工具 · 只读默认 · 工作区边界校验</div>
+<div class="card" style="margin-bottom:18px"><h2>已注册工具</h2><span class="tool">scan_project</span><span class="tool">analyze_dependencies</span><span class="tool">task_create</span><span class="tool">task_list</span><span class="tool">task_get</span><span class="tool">task_update</span><span class="tool">generate_architecture_report</span><span class="tool">generate_readme_draft</span><span class="tool">plugin_info</span><span class="tool">plugin_logs</span></div>
+<div class="grid">
+  <div class="card"><h2>scan_project · 本仓库</h2>
+    <div class="stat"><div><b>116</b><small>文件</small></div><div><b>23</b><small>目录</small></div><div><b>639.0 KB</b><small>体积</small></div></div>
+    <div class="row"><span>主导语言</span><span>TypeScript</span></div>
+    <div class="row"><span>语言分布</span><span>TypeScript、JavaScript、Markdown、JSON、HTML、Python</span></div>
+    <div class="row"><span>包管理器</span><span>npm</span></div>
+    <div class="row"><span>跳过敏感文件</span><span>0 个</span></div>
+  </div>
+  <div class="card"><h2>analyze_dependencies · 自分析 src/</h2>
+    <div class="stat"><div><b>31</b><small>模块</small></div><div><b>96</b><small>依赖边</small></div><div><b>0</b><small>循环依赖</small></div></div>
+    <div class="row"><span>语言判定</span><span>javascript</span></div>
+    <div class="row"><span>不可解析导入</span><span>0</span></div>
+    <div class="row"><span>外部依赖</span><span class="mono" style="font-size:12px">node:fs(11)、node:path(8)、@deepseek-ai/dsh-tools(5)、node:fs/promises(3)</span></div>
+  </div>
+  <div class="card"><h2>示例 Python 项目 · 循环依赖 <span class="tag bad">已确认</span></h2>
+    <div class="stat"><div><b>5</b><small>模块</small></div><div><b>5</b><small>边</small></div><div><b>1</b><small>循环</small></div></div>
+    <div class="row"><span>强连通分量</span><span class="mono" style="font-size:12px">app.models ↔ app.repository ↔ app.service</span></div>
+    <div class="row"><span>外部依赖</span><span>json、os</span></div>
+  </div>
+  <div class="card"><h2>自证与可观测</h2>
+    <div class="row"><span>plugin_info</span><span>版本 / 构建时间 / 生效配置 / 工具清单</span></div>
+    <div class="row"><span>plugin_logs</span><span>最近 200 条（脱敏、环形缓冲）</span></div>
+    <div class="row"><span>文档生成</span><span>默认 dry-run、默认不覆盖</span></div>
+    <div class="row"><span>任务库</span><span>SQLite + 依赖调度 + 事务</span></div>
+  </div>
+</div>
+<div class="foot">数据生成于 2026-10-23T00:34:05.206Z；由 scripts/showcase.mjs 调用真实服务生成，请勿手改。</div>
+</body></html>
