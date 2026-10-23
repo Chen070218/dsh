@@ -371,3 +371,21 @@ CI 同步改为 `npm ci --ignore-scripts` + `cache: npm`。
 
 **硬防护**：新增 `scripts/safe-remove.mjs`——递归删除前扫描整棵树，只要发现重解析点就拒绝执行并给出处理方式。
 以后任何删除动作都走它。
+
+## 16. 第十一轮：加载信标 + 安装方式收敛
+
+**先取证再改**：宿主重启后工具消失，profile 里出现 `cordis.patch.yml.bak-1792748794105`——说明 DSH 走了 sanitize（备份 patch、重写 bundles）。
+
+**信标给出的答案**（v0.7.2 加入）：`apply` 成功后写 `<repo>/.projectops/last-load.json`。重载后读到的内容是：
+
+```json
+{ "version": "0.7.2", "at": "…T16:27:27Z", "tools": 10, "locale": "zh", "pid": 33356 }
+```
+
+同时实测发现：**profile 的 `cordis.patch.yml` 里没有我们的条目，插件照样加载成功**——
+因为宿主按 `dsh.profile.bundles` 读取每个 bundle 自己 `package.json` 里 `dsh.bundle.patch` 指向的 patch。
+所以安装只需要三件事：依赖 + bundles 条目 + 目录联接。profile patch 是多余的，也是被 sanitize 改写的那个文件。
+
+**改动**：安装脚本不再写 profile patch；`package.json` 去掉 `dsh.client`（它让宿主去加载不存在的客户端 bundle，是 sanitize 的可疑触发源）。
+
+**教训沉淀**：两次事故都源于「对指向仓库的目录联接做递归删除」，已加 `scripts/safe-remove.mjs` 作为强制入口。

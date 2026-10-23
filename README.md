@@ -117,6 +117,18 @@ graph TD
 工具描述与参数说明来自 `locale/zh.json` / `locale/en.json`，配置项 `locale: auto | zh | en`（默认 auto：配置 → 环境变量 → 系统区域（Intl）→ 英文）。
 测试强制两套目录**键集合完全一致**，并校验 10 个工具的描述与每个参数都有文案——漏译会直接挂测试。
 
+### 加载诊断（v0.7.2+）
+
+插件 `apply` 成功后会写一个**加载信标** `<repo>/.projectops/last-load.json`（版本、时间、工具数、locale、pid）。
+宿主在加载失败时会静默 sanitize profile（把 `cordis.patch.yml` 备份成 `*.bak-<ts>`、重写 bundles），
+此时用信标就能区分两种失败：
+
+- 信标**没有**更新 → 宿主根本没加载这一版（清单 / compose / patch 层问题）
+- 信标更新了但工具不在 → 加载成功，是注册或可见性问题
+
+安装只需要三件事：profile `package.json` 的依赖、`dsh.profile.bundles` 里的条目、以及指向仓库的目录联接。
+**不需要**改 profile 的 `cordis.patch.yml`——宿主会按 bundle 读包内的 `cordis.patch.yml`（实测确认）。
+
 ### 依赖锁定
 
 `package-lock.json` 已提交（lockfileVersion 3，含 `resolved` 与 `sha512` integrity）；CI 用 `npm ci` + npm 缓存。

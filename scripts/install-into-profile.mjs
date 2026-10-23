@@ -101,6 +101,8 @@ manifest.dsh ??= {}
 manifest.dsh.profile ??= {}
 manifest.dsh.profile.bundles ??= []
 
+// 加载来源说明（实测）：宿主按 dsh.profile.bundles 读每个 bundle 自己的 cordis.patch.yml（dsh.bundle.patch）。
+// 因此**不需要**往 profile 的 cordis.patch.yml 里追加块——少改一个文件，就少一个被 DSH sanitize 的机会。
 const spec = 'file:' + projectRoot.replace(/\\/g, '/')
 const bundlePresent = manifest.dsh.profile.bundles.includes(PACKAGE_NAME)
 const pluginPatch = [
@@ -128,7 +130,7 @@ const patchPresent = patchText.includes("name: " + PACKAGE_NAME)
 console.log('install: profile      = ' + profileDir)
 console.log('install: dependency   = ' + PACKAGE_NAME + ' -> ' + spec + (manifest.dependencies[PACKAGE_NAME] ? ' (已存在)' : ''))
 console.log('install: bundle 条目  = ' + (bundlePresent ? '已存在' : '将追加到 dsh.profile.bundles'))
-console.log('install: cordis patch = ' + (patchPresent ? '已存在' : '将追加到 cordis.patch.yml'))
+console.log('install: cordis patch = 不需要（宿主按 bundle 读取包内 patch）')
 console.log('install: node_modules 联接 = ' + (existsSync(nodeModulesPath) ? '已存在' : '将创建 ' + nodeModulesPath))
 
 if (!apply) {
@@ -145,7 +147,7 @@ copyFileSync(patchPath, join(backupDir, 'cordis.patch.yml'))
 manifest.dependencies[PACKAGE_NAME] = spec
 if (!bundlePresent) manifest.dsh.profile.bundles.push(PACKAGE_NAME)
 writeFileSync(packagePath, JSON.stringify(manifest, null, 2) + '\n', 'utf8')
-if (!patchPresent) writeFileSync(patchPath, patchText + (patchText.endsWith('\n') ? '' : '\n') + pluginPatch, 'utf8')
+// 不再写 profile patch：bundle 机制已经足够（见上）
 
 if (!existsSync(nodeModulesPath)) {
   mkdirSync(dirname(nodeModulesPath), { recursive: true })
