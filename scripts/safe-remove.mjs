@@ -9,7 +9,7 @@
  * 用法：node scripts/safe-remove.mjs <目录> [--force]
  */
 import { lstatSync, readdirSync, rmSync, rmdirSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { join, resolve } from 'node:path'
 
 const target = resolve(process.argv[2] ?? '')
 const force = process.argv.includes('--force')

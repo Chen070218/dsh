@@ -22,7 +22,7 @@
 | 四 | SQLite 任务管理（任务/状态/执行记录） | ✅ 完成（node:sqlite，无需 native 依赖） |
 | 五 | Markdown 架构报告 / README 初稿生成（dry-run + 防覆盖） | ✅ 完成 |
 
-测试规模：**112 个用例全绿**（单元 + 宿主组合 + 真实 Loader 加载路径）；其中 **92 个**不依赖 DSH 安装，CI 跑这一批（`npm run test:ci`，工具层用 mock dsh-tools 契约替身），语句覆盖率基线 **82.48%**。
+测试规模：**116 个用例全绿**（单元 + 宿主组合 + 真实 Loader 加载路径）；其中 **92 个**不依赖 DSH 安装，CI 跑这一批（`npm run test:ci`，工具层用 mock dsh-tools 契约替身），语句覆盖率基线 **82.48%**。
 
 ## 5 分钟上手
 
