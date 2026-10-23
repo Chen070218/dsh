@@ -13,6 +13,9 @@
  *
  * 注意：这里用结构化端口类型描述宿主，避免把 cordis 的具体类型固化进业务代码。
  */
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import Schema from '@deepseek-ai/schemastery'
 import { createScanCache } from './services/scan-cache.js'
 import { createTaskService } from './services/task-service.js'
@@ -127,6 +130,29 @@ export function createLoggerFor(config: ResolvedConfig): Logger {
   })
 }
 
+/**
+ * 加载信标：插件 apply 成功后把版本与时间写进 <repo>/.projectops/last-load.json。
+ *
+ * 为什么需要：宿主把插件的 patch 判为不可用时会静默 sanitize（备份 patch、重写 bundles），
+ * 这时工具会消失且没有任何报错可看。信标让我们能区分两种失败：
+ *   - 信标没有更新 = 宿主根本没加载这一版（compose/patch/清单层的问题）
+ *   - 信标更新了但工具不在 = 加载成功、注册或可见性层的问题
+ */
+function writeLoadBeacon(toolCount: number, locale: string): void {
+  try {
+    const target = new URL('../.projectops/last-load.json', import.meta.url)
+    const file = fileURLToPath(target)
+    mkdirSync(dirname(file), { recursive: true })
+    writeFileSync(
+      file,
+      JSON.stringify({ version: PLUGIN_VERSION, at: new Date().toISOString(), tools: toolCount, locale, pid: process.pid }, null, 2) + '\n',
+      'utf8',
+    )
+  } catch {
+    // 信标失败绝不能影响插件加载
+  }
+}
+
 export function apply(ctx: PluginContextPort, rawConfig: ProjectOpsConfig = {}): void {
   const config = resolveConfig(rawConfig)
   const buffer = createLogBuffer(200)
@@ -191,6 +217,8 @@ export function apply(ctx: PluginContextPort, rawConfig: ProjectOpsConfig = {}):
   const localized = localizeTools(coreTools, translator)
   // 每个工具都包一层计时+计数日志（只记数字，不记内容）
   for (const tool of instrumentTools([...localized, ...pluginTools], logger)) ctx.tools.register(tool)
+
+  writeLoadBeacon(toolNames.length, translator.locale)
 
   logger.info('plugin/apply', PLUGIN_NAME + ' 已挂载', {
     version: PLUGIN_VERSION,
