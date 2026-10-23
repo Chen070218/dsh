@@ -8,7 +8,7 @@
 import type { FsPort } from '../adapters/fs-adapter.js'
 import type { SourceReader } from '../adapters/source-reader.js'
 import { describeError, mapFsError } from '../util/errors.js'
-import { normalizeRelativePath, parseJsonc } from './js-dependency-analyzer.js'
+import { normalizeRelativePath, parseJsonc } from './jsonc.js'
 
 export interface WorkspacePackage {
   name: string

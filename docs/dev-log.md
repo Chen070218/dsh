@@ -389,3 +389,22 @@ CI 同步改为 `npm ci --ignore-scripts` + `cache: npm`。
 **改动**：安装脚本不再写 profile patch；`package.json` 去掉 `dsh.client`（它让宿主去加载不存在的客户端 bundle，是 sanitize 的可疑触发源）。
 
 **教训沉淀**：两次事故都源于「对指向仓库的目录联接做递归删除」，已加 `scripts/safe-remove.mjs` 作为强制入口。
+
+## 17. 第十二轮：宿主内逐项验收 + 修掉自己引入的循环
+
+宿主里 10 个工具全部回归，用真实调用逐项验收：
+
+| 项 | 实测 |
+| --- | --- |
+| plugin_info | v0.7.4 · staleBuild false · 10 工具 · loadedFrom 指向仓库 lib |
+| analyze_dependencies | javascript · 35 模块 · 104 边 · **cycles 1** · nested 边 1 · unresolved 0 |
+| 任务重试上限 | attempts 1→2→3，第 3 次失败自动加 `[已达重试上限]`，第 4 次推进被拒 |
+| generate_architecture_report | dryRun 生效 · 8 节 · 1 确认 + 1 启发式 |
+| plugin_logs | 能看到 tasks/open、doc/architecture、tool/* 计时记录 |
+
+**验收抓到的真问题**：自分析 `src/` 出现 **1 处循环依赖**——是我上一轮引入的
+`workspace-packages ⇄ js-dependency-analyzer` 互相 import（一个要 `parseJsonc`，一个要 `loadWorkspaceIndex`）。
+按插件自己给的建议修掉：把 `parseJsonc` / `normalizeRelativePath` 抽到中立的 `services/jsonc.ts`，两侧都从那里引用。
+修完本地复测循环归零。
+
+同时修掉一处副作用：`createTasksForFindings` 在 dry-run 下也会写任务库，现在只在 `dryRun=false` 时生效。

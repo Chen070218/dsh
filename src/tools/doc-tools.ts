@@ -143,7 +143,7 @@ export function createDocTools(deps: DocToolDeps) {
       includeTasks: { type: 'boolean', description: '是否把当前任务队列写进报告（默认 true）' },
       createTasksForFindings: {
         type: 'boolean',
-        description: '是否把「已确认的问题」自动落成任务（默认 false；按标题去重）',
+        description: '是否把「已确认的问题」自动落成任务（默认 false；按标题去重；仅在 dryRun=false 时生效）',
       },
       dryRun: { type: 'boolean', description: '只预览不写盘（默认 true；确认后传 false 才写入）' },
       overwrite: { type: 'boolean', description: '允许覆盖已存在的文件（默认 false）' },
@@ -189,7 +189,8 @@ export function createDocTools(deps: DocToolDeps) {
       })
 
       const createdTasks: string[] = []
-      if (args.createTasksForFindings === true && store !== undefined) {
+      // 只有真正写入时才落任务：dry-run 不应产生任何副作用（包括任务库）
+      if (args.createTasksForFindings === true && store !== undefined && args.dryRun === false) {
         const existing = new Set(store.list({ limit: 200 }).map((task) => task.title))
         for (const finding of report.findings) {
           if (finding.kind !== 'confirmed') continue

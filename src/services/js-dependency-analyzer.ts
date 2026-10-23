@@ -24,6 +24,7 @@ import type {
 } from './dependency-analyzer.js'
 import { findCycles } from './dependency-analyzer.js'
 import { parseJsImports } from './js-imports.js'
+import { normalizeRelativePath, parseJsonc } from './jsonc.js'
 import { collectSourceFiles } from './source-files.js'
 import { loadWorkspaceIndex } from './workspace-packages.js'
 
@@ -40,39 +41,6 @@ export interface PathAliasRule {
 }
 
 /** 容错解析 tsconfig.json（去注释与尾逗号），失败返回 undefined。 */
-export function parseJsonc(text: string): unknown {
-  const withoutBlock = text.replace(/\/\*[\s\S]*?\*\//g, '')
-  const withoutLine = withoutBlock
-    .split('\n')
-    .map((line) => {
-      let quote: string | null = null
-      for (let index = 0; index < line.length; index += 1) {
-        const char = line[index]
-        if (quote !== null) {
-          if (char === '\\') {
-            index += 1
-            continue
-          }
-          if (char === quote) quote = null
-          continue
-        }
-        if (char === '"') {
-          quote = char
-          continue
-        }
-        if (char === '/' && line[index + 1] === '/') return line.slice(0, index)
-      }
-      return line
-    })
-    .join('\n')
-  const withoutTrailingCommas = withoutLine.replace(/,(\s*[}\]])/g, '$1')
-  try {
-    return JSON.parse(withoutTrailingCommas)
-  } catch {
-    return undefined
-  }
-}
-
 /** 从 tsconfig 取 paths 别名；baseUrl 参与归一化。 */
 export function extractPathAliases(config: unknown): PathAliasRule[] {
   if (typeof config !== 'object' || config === null) return []
@@ -112,6 +80,8 @@ export function matchAlias(rules: readonly PathAliasRule[], specifier: string): 
   return []
 }
 
+export { normalizeRelativePath, parseJsonc }
+
 const ENTRY_SUFFIXES: readonly string[] = ['/index']
 
 const RESOLVE_SUFFIXES: readonly string[] = [
@@ -147,20 +117,6 @@ function clamp(value: number, min: number, max: number): number {
 
 function moduleKeyOf(relativePath: string): string {
   return relativePath.replace(/\.[^./]+$/, '')
-}
-
-/** 相对路径规整：消掉 './'、'../' 与重复斜杠，不触碰文件系统。 */
-export function normalizeRelativePath(path: string): string {
-  const segments: string[] = []
-  for (const segment of path.split('/')) {
-    if (segment === '' || segment === '.') continue
-    if (segment === '..') {
-      segments.pop()
-      continue
-    }
-    segments.push(segment)
-  }
-  return segments.join('/')
 }
 
 function directoryOf(relativePath: string): string {
