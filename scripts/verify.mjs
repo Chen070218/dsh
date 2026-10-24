@@ -21,6 +21,7 @@ const steps = [
       'tests/services.*.test.ts', 'tests/security.*.test.ts', 'tests/util.*.test.ts',
       'tests/storage.*.test.ts', 'tests/adapters.*.test.ts', 'tests/tools.*.test.ts'],
   },
+  { name: 'pack contents', args: ['scripts/check-pack.mjs'] },
   { name: 'demo: scan', args: ['scripts/demo-scan.mjs'] },
   { name: 'demo: analyze', args: ['scripts/demo-analyze.mjs'] },
   { name: 'demo: report', args: ['scripts/demo-report.mjs'] },

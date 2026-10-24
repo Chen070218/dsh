@@ -46,6 +46,8 @@ jobs:
         run: npm run test:ci
       - name: Metadata self-check
         run: node scripts/check-metadata.mjs
+      - name: Pack contents (files allowlist)
+        run: npm run check:pack
       - name: Lint (erasable syntax / console / any / whitespace)
         run: npm run lint
       - name: Coverage gate (statements >= 80%)

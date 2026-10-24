@@ -4,7 +4,7 @@
  * 为什么不用 npm pack：在本机直接跑 npm-cli.js 时 pack 会报 ERR_INVALID_ARG_TYPE（环境问题），
  * 而发布内容完全由 files 白名单决定，这里做确定性检查即可。
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -20,7 +20,10 @@ for (const entry of allow) {
     missing.push(entry)
     continue
   }
-  counts[entry] = readdirSync(full, { recursive: true }).filter((name) => /\.[cm]?js$|\.[cm]?ts$/.test(String(name))).length
+  const isDir = statSync(full).isDirectory()
+  counts[entry] = isDir
+    ? readdirSync(full, { recursive: true }).filter((name) => /\.[cm]?js$/.test(String(name))).length
+    : 1
 }
 
 const required = ['lib/index.js', 'lib/client/index.js', 'cordis.patch.yml', 'dsh.plugin.json', 'README.md', 'LICENSE', 'locale/zh.json', 'locale/en.json']
