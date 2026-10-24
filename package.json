@@ -1,6 +1,6 @@
 {
   "name": "dsh-projectops",
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "DSH ProjectOps — 项目工程管家插件：结构扫描、Python 与 TypeScript/JavaScript 依赖分析、循环依赖与 Mermaid 架构图、SQLite 任务管理、架构文档生成",
   "license": "MIT",
   "type": "module",
@@ -73,7 +73,8 @@
     "check:coverage": "node scripts/check-coverage.mjs",
     "check:publication": "node scripts/check-publication.mjs --strict",
     "configure:repo": "node scripts/configure-repository.mjs",
-    "check:pack": "node scripts/check-pack.mjs"
+    "check:pack": "node scripts/check-pack.mjs",
+    "push:github": "node scripts/push-to-github.mjs"
   },
   "engines": {
     "node": ">=22.18.0"

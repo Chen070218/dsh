@@ -23,3 +23,6 @@ Thumbs.db
 *.key
 *.pfx
 .npmrc
+
+# 内部开发记录（不进公开仓库）
+docs/dev-log.internal.md
