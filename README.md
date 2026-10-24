@@ -245,7 +245,7 @@ CI 里的 `metadata strict` 步骤同样会在占位符未替换时失败。
 - 英文说明：[README.en.md](README.en.md)
 - CI：`.github/workflows/ci.yml` 在 Ubuntu/Windows × Node 22/24 上跑构建、`test:ci` 与 demo
 
-> 发布到 npm 前把 `package.json` 里的 `repository` / `homepage` / `bugs` 换成你的仓库地址（当前是占位符 `your-name`）。
+> 发布到 npm 前把 `package.json` 里的 `repository` / `homepage` / `bugs` 换成你的仓库地址（当前是占位符 `<你的 GitHub 账号>`）。
 
 ## 已知限制
 - 依赖分析是词法级静态解析（动态导入、拼接出来的模块名识别不到）；混合仓库一次只分析一种语言（返回 `mixedProject` 标记）。
