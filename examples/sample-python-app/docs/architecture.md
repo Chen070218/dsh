@@ -7,7 +7,7 @@
 
 | 项目 | 值 |
 | --- | --- |
-| 项目根目录 | D:\学习资料\deepseek\dsh-projectops\examples\sample-python-app\ |
+| 项目根目录 | <repo>\examples\sample-python-app\ |
 | 主导语言 | Python（分布：Python、Markdown） |
 | 文件 / 目录 | 6 / 1 |
 | 代码体积 | 927 B |

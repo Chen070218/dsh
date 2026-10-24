@@ -224,6 +224,17 @@ dsh-projectops/
 
 文档：[用法手册](docs/usage.md)（八个工具的真实调用样例） · [架构说明](docs/architecture.md)（含 Mermaid 图） · [排错手册](docs/troubleshooting.md) · [开发记录](docs/dev-log.md)。
 
+## 发布到 GitHub（三步）
+
+```bash
+node scripts/configure-repository.mjs https://github.com/<你>/dsh-projectops   # 写入 repository/homepage/bugs、替换徽章占位符
+git remote add origin https://github.com/<你>/dsh-projectops.git               # 首次
+git push -u origin main && git push --tags
+```
+
+上传前自检：`npm run check:publication` —— 会拦截本机绝对路径、疑似密钥、占位符，以及误跟踪的 `lib/` / `node_modules/` / `.projectops/`。
+CI 里的 `metadata strict` 步骤同样会在占位符未替换时失败。
+
 ## 参与与开源
 
 - 许可证：[MIT](LICENSE)

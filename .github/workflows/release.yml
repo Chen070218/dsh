@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: build, test and publish to npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install (lockfile-pinned)
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify (build + tests + demos)
+        run: npm run verify
+      - name: Publication check
+        run: npm run check:publication
+      - name: Publish
+        if: env.NODE_AUTH_TOKEN != ''
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
