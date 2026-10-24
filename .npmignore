@@ -1,0 +1,1 @@
+# npm 只按 package.json 的 files 白名单发布；不要在这里继承 .gitignore（否则 lib/ 会被排除）

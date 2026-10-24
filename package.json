@@ -72,7 +72,8 @@
     "lint": "node scripts/lint.mjs",
     "check:coverage": "node scripts/check-coverage.mjs",
     "check:publication": "node scripts/check-publication.mjs --strict",
-    "configure:repo": "node scripts/configure-repository.mjs"
+    "configure:repo": "node scripts/configure-repository.mjs",
+    "check:pack": "node scripts/check-pack.mjs"
   },
   "engines": {
     "node": ">=22.18.0"
