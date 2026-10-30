@@ -74,7 +74,8 @@
     "check:publication": "node scripts/check-publication.mjs --strict",
     "configure:repo": "node scripts/configure-repository.mjs",
     "check:pack": "node scripts/check-pack.mjs",
-    "push:github": "node scripts/push-to-github.mjs"
+    "push:github": "node scripts/push-to-github.mjs",
+    "prepublish:check": "node scripts/preflight-publish.mjs"
   },
   "engines": {
     "node": ">=22.18.0"

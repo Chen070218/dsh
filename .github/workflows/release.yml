@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # npm provenance（供应链签名）需要
 
 jobs:
   publish:
@@ -24,20 +25,17 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install (lockfile-pinned)
         run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Build
-        run: npm run build
-      - name: Type check
-        run: npx tsc --noEmit -p tsconfig.json
-      - name: Tests (no DSH runtime needed)
-        run: npm run test:ci
-      - name: Pack contents
-        run: npm run check:pack
-      - name: Lint
-        run: npm run lint
-      - name: Publication check
-        run: npm run check:publication
+      - name: Version must match the tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          pkg_version=$(node -p "require('./package.json').version")
+          tag_version="${{ github.ref_name }"
+          if [ "v$pkg_version" != "$tag_version" ]; then
+            echo "标签 $tag_version 与 package.json 版本 v$pkg_version 不一致" >&2
+            exit 1
+          fi
+      - name: Preflight (build, typecheck, tests, pack, publication)
+        run: node scripts/preflight-publish.mjs
       - name: Publish (skipped when no NPM_TOKEN secret)
         if: env.NODE_AUTH_TOKEN != ''
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
