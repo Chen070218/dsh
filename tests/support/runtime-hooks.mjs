@@ -32,7 +32,10 @@ function findRuntimeNodeModules() {
   return undefined
 }
 
-export const RUNTIME_NODE_MODULES = findRuntimeNodeModules()
+const FORCE_MOCK = process.env.DSH_FORCE_MOCK === '1'
+// DSH_FORCE_MOCK=1 强制使用契约替身，用来在装有 DSH 的机器上复现 CI 环境
+const RUNTIME_NODE_MODULES_RAW = FORCE_MOCK ? undefined : findRuntimeNodeModules()
+export const RUNTIME_NODE_MODULES = RUNTIME_NODE_MODULES_RAW
 
 // 无 DSH 时把 @deepseek-ai/dsh-tools 指向本地契约替身：工具层测试仍可运行。
 if (RUNTIME_NODE_MODULES === undefined) {
@@ -41,6 +44,9 @@ if (RUNTIME_NODE_MODULES === undefined) {
     resolve(specifier, context, nextResolve) {
       if (specifier === '@deepseek-ai/dsh-tools') {
         return { url: new URL('./mock-dsh-tools.mjs', import.meta.url).href, shortCircuit: true }
+      }
+      if (specifier === '@deepseek-ai/schemastery') {
+        return { url: new URL('./mock-schemastery.mjs', import.meta.url).href, shortCircuit: true }
       }
       return nextResolve(specifier, context)
     },

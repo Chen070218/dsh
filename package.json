@@ -1,6 +1,6 @@
 {
   "name": "dsh-projectops",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "DSH ProjectOps — 项目工程管家插件：结构扫描、Python 与 TypeScript/JavaScript 依赖分析、循环依赖与 Mermaid 架构图、SQLite 任务管理、架构文档生成",
   "license": "MIT",
   "type": "module",
@@ -58,7 +58,7 @@
     "build": "node scripts/build.mjs",
     "prepare": "node scripts/build.mjs",
     "test": "node --test --import ./tests/support/runtime-hooks.mjs \"tests/**/*.test.ts\"",
-    "test:ci": "node --test --import ./tests/support/runtime-hooks.mjs \"tests/services.*.test.ts\" \"tests/security.*.test.ts\" \"tests/util.*.test.ts\" \"tests/storage.*.test.ts\" \"tests/adapters.*.test.ts\" \"tests/tools.*.test.ts\"",
+    "test:ci": "node --test --import ./tests/support/runtime-hooks.mjs \"tests/services.*.test.ts\" \"tests/security.*.test.ts\" \"tests/util.*.test.ts\" \"tests/storage.*.test.ts\" \"tests/adapters.*.test.ts\" \"tests/tools.*.test.ts\" \"tests/i18n.test.ts\" \"tests/client.views.test.ts\"",
     "demo": "node scripts/demo-scan.mjs",
     "demo:analyze": "node scripts/demo-analyze.mjs",
     "demo:report": "node scripts/demo-report.mjs",

@@ -39,6 +39,9 @@ npm run verify         # 一键自检：构建 + typecheck + 全量测试 + CI �
 npm run lint           # 离线原生 lint（可擦除语法/console/any/tab/行尾空白）
 npm run check:coverage # 覆盖率门槛（默认 statements ≥ 80%）
 npm run test:ci        # 无 DSH 环境也能跑（含工具层契约测试）
+# 本机装有 DSH 时，想复现 CI（强制使用 mock 替身）：
+#   Linux/macOS: DSH_FORCE_MOCK=1 npm run test:ci
+#   Windows:     set DSH_FORCE_MOCK=1 && npm run test:ci
 node scripts/check-metadata.mjs   # 发布前元数据自检
 node scripts/showcase.mjs         # 用真实调用重新生成效果图页面
 ```
