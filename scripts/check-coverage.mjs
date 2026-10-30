@@ -31,9 +31,9 @@ let output = ''
 child.stdout.on('data', (chunk) => { output += String(chunk) })
 child.stderr.on('data', (chunk) => { output += String(chunk) })
 child.on('close', (code) => {
-  const row = output.split('\n').find((line) => /^ℹ all files\s*\|/.test(line))
+  const row = output.split('\n').find((line) => /all files/.test(line) && line.includes('|'))
   if (code !== 0 || row === undefined) {
-    console.error('check-coverage: 测试失败或没有覆盖率输出')
+    console.error('check-coverage: 测试失败，或当前 Node 版本的覆盖率输出无法解析（门禁应固定在一个 Node 版本上运行）')
     console.error(output.split('\n').slice(-8).join('\n'))
     process.exit(1)
   }

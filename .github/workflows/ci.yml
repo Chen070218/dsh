@@ -50,7 +50,9 @@ jobs:
         run: npm run check:pack
       - name: Lint (erasable syntax / console / any / whitespace)
         run: npm run lint
-      - name: Coverage gate (statements >= 80%)
+      # 覆盖率统计口径随 Node 大版本变化，门禁固定在一个版本上跑，避免误报
+      - name: Coverage gate (statements >= 80%, Node 24 only)
+        if: matrix.node == '24.x'
         run: npm run check:coverage
       - name: Smoke demos
         run: |
