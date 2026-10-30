@@ -21,8 +21,16 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install (lockfile-pinned)
         run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Verify (build + tests + demos)
-        run: npm run verify
+      - name: Build
+        run: npm run build
+      - name: Type check
+        run: npx tsc --noEmit -p tsconfig.json
+      - name: Tests (no DSH runtime needed)
+        run: npm run test:ci
+      - name: Pack contents
+        run: npm run check:pack
+      - name: Lint
+        run: npm run lint
       - name: Publication check
         run: npm run check:publication
       - name: Publish
