@@ -3,7 +3,7 @@
 > A project-engineering copilot plugin for [DeepSeek Harness](https://harness.deepseek.com) (DSH):
 > scan a project, analyze Python imports, detect dependency cycles, manage tasks in SQLite, and generate architecture docs — all read-only by default, all inside an authorized workspace.
 
-[![CI](https://github.com/your-name/dsh-projectops/actions/workflows/ci.yml/badge.svg)](https://github.com/your-name/dsh-projectops/actions/workflows/ci.yml)
+[![CI](https://github.com/chen070218/DSH/actions/workflows/ci.yml/badge.svg)](https://github.com/chen070218/DSH/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 中文文档见 [README.md](README.md)。
