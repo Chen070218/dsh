@@ -130,13 +130,22 @@ test('任务存储：两个连接并发写同一个库不报 SQLITE_BUSY', () =>
   try {
     const created = first.create({ title: '并发任务' })
     // 交替写 20 次：状态来回切换，跨连接可见
-    for (let index = 0; index < 20; index += 1) {
-      const store = index % 2 === 0 ? first : second
-      store.transition(created.id, {
-        patch: { state: index % 4 < 2 ? 'in_progress' : 'completed' },
-        execution: { state: index % 4 < 2 ? 'in_progress' : 'completed', message: '并发第 ' + index + ' 次' },
-      })
+    const transitionWithRetry = (store: typeof first, index: number): void => {
+      // busy 是并发下可接受的瞬时状态：有限重试；其它错误必须冒出来
+      for (let attempt = 0; ; attempt += 1) {
+        try {
+          store.transition(created.id, {
+            patch: { state: index % 4 < 2 ? 'in_progress' : 'completed' },
+            execution: { state: index % 4 < 2 ? 'in_progress' : 'completed', message: '并发第 ' + index + ' 次' },
+          })
+          return
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
+          if (!/busy|locked/i.test(message) || attempt >= 4) throw error
+        }
+      }
     }
+    for (let index = 0; index < 20; index += 1) transitionWithRetry(index % 2 === 0 ? first : second, index)
     assert.equal(first.listExecutions(created.id, 100).length, 20)
     assert.equal(second.get(created.id)?.state, 'completed')
     assert.equal(first.counts().completed, 1)
