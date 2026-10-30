@@ -82,11 +82,11 @@
   "author": "dsh-projectops contributors",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chen070218/DSH.git"
+    "url": "git+https://github.com/Chen070218/dsh.git"
   },
-  "homepage": "https://github.com/chen070218/DSH#readme",
+  "homepage": "https://github.com/Chen070218/dsh#readme",
   "bugs": {
-    "url": "https://github.com/chen070218/DSH/issues"
+    "url": "https://github.com/Chen070218/dsh/issues"
   },
   "publishConfig": {
     "access": "public"
